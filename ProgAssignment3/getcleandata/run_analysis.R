@@ -8,33 +8,20 @@ unzip(zipfile = "./getcleandata/projectdataset.zip", exdir = "./getcleandata")
 
 # 1. Merge the training and test datasets
 
-path_rf <- file.path("./data" , "UCI HAR Dataset")
-files<-list.files(path_rf, recursive=TRUE)
-files
 # 1.1 Reading files
 
 #Read the Activity files
-x_train <- read.table("./getcleandata/UCI HAR Dataset/train/X_train.txt")
-y_train <- read.table("./getcleandata/UCI HAR Dataset/train/y_train.txt")
-subject_train <- read.table("./getcleandata/UCI HAR Dataset/train/subject_train.txt")
 
-# 1.1.2 Reading test datasets
-x_test <- read.table("./getcleandata/UCI HAR Dataset/test/X_test.txt")
-y_test <- read.table("./getcleandata/UCI HAR Dataset/test/y_test.txt")
-subject_test <- read.table("./getcleandata/UCI HAR Dataset/test/subject_test.txt")
-
-
-
-dataActivityTest  <- read.table("./getcleandata/UCI HAR Dataset/train/X_train.txt",header = FALSE)
-dataActivityTrain <- read.table("./getcleandata/UCI HAR Dataset/train/y_train.txt",header = FALSE)
+dataActivityTest  <- read.table("./getcleandata/UCI HAR Dataset/test/X_test.txt",header = FALSE)
+dataActivityTrain <- read.table("./getcleandata/UCI HAR Dataset/train/x_train.txt",header = FALSE)
 
 #Read the Subject files
 dataSubjectTrain <- read.table("./getcleandata/UCI HAR Dataset/train/subject_train.txt",header = FALSE)
 dataSubjectTest  <- read.table("./getcleandata/UCI HAR Dataset/test/subject_test.txt",header = FALSE)
 
 #Read Fearures files
-dataFeaturesTest  <- read.table(file.path(path_rf, "test" , "X_test.txt" ),header = FALSE)
-dataFeaturesTrain <- read.table(file.path(path_rf, "train", "X_train.txt"),header = FALSE)
+dataFeaturesTest  <- read.table("./getcleandata/UCI HAR Dataset/features.txt",header = FALSE)
+#dataFeaturesTrain <- read.table("./getcleandata/UCI HAR Dataset/features_info.txt",header = FALSE)
 
 # 1.2 Look at the properties of the above varibles
 str(dataActivityTest)
@@ -47,12 +34,12 @@ str(dataFeaturesTrain)
 #1.3 Concatenate the data tables by rows
 dataSubject <- rbind(dataSubjectTrain, dataSubjectTest)
 dataActivity<- rbind(dataActivityTrain, dataActivityTest)
-dataFeatures<- rbind(dataFeaturesTrain, dataFeaturesTest)
+#dataFeatures<- rbind(dataFeaturesTrain, dataFeaturesTest)
 
 #1.4set names to variables
 names(dataSubject)<-c("subject")
 names(dataActivity)<- c("activity")
-dataFeaturesNames <- read.table(file.path(path_rf, "features.txt"),head=FALSE)
+dataFeaturesNames <- read.table("./getcleandata/UCI HAR Dataset/features.txt",header = FALSE)
 names(dataFeatures)<- dataFeaturesNames$V2
 
 #1.4 Merge columns to get the data frame Data for all data
@@ -69,7 +56,7 @@ str(Data)
 
 #Uses descriptive activity names to name the activities in the data set
 #Read descriptive activity names from “activity_labels.txt”
-activityLabels <- read.table(file.path(path_rf, "activity_labels.txt"),header = FALSE)
+activityLabels <- read.table("./getcleandata/UCI HAR Dataset/activity_labels.txt",header = FALSE)
 head(Data$activity,30)
 
 #Appropriately labels the data set with descriptive variable names
@@ -81,7 +68,6 @@ names(Data)<-gsub("Mag", "Magnitude", names(Data))
 names(Data)<-gsub("BodyBody", "Body", names(Data))
 
 names(Data)
-
 
 #Creates a second,independent tidy data set and ouput it
 library(plyr);
